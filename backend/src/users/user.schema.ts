@@ -1,7 +1,6 @@
 // src/users/user.schema.ts
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { Reward } from "../rewards/reward.schema";
 
 @Schema()
 export class UserModel {
@@ -19,6 +18,7 @@ export class UserModel {
 }
 
 // 👇 Add <Types.ObjectId> generic to Document to fix `_id` type
-export type UserDocument = Document<Types.ObjectId, {}, UserModel> & UserModel;
+export type UserDocument = Document<Types.ObjectId, object, UserModel> &
+  UserModel;
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
