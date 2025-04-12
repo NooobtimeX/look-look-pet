@@ -1,20 +1,14 @@
-// app/api/rewards/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { API_URL } from "@/lib/api";
+// /app/api/rewards/route.ts
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-  try {
-    const res = await fetch(`${API_URL}/rewards`);
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("Failed to fetch rewards:", errText);
-      return new NextResponse("Failed to fetch rewards", { status: 500 });
-    }
-
-    const rewards = await res.json();
-    return NextResponse.json(rewards);
-  } catch (error) {
-    console.error("Error:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+export async function GET() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/rewards`);
+  if (!res.ok) {
+    return NextResponse.json(
+      { error: "Failed to fetch rewards" },
+      { status: res.status }
+    );
   }
+  const data = await res.json();
+  return NextResponse.json(data);
 }

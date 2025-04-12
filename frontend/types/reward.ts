@@ -5,5 +5,5 @@ export interface Reward {
   name: string;
   description: string;
   discount: string;
-  partner: string | Partner; // can be populated or just an ID
+  partner: Partner; // can be populated or just an ID
 }

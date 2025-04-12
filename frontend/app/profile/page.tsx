@@ -1,16 +1,7 @@
 import { cookies } from "next/headers";
 import { decodeToken } from "@/lib/auth";
 import React from "react";
-
-interface Reward {
-  _id: string;
-  name: string;
-  description: string;
-  discount: string;
-  partner: {
-    name: string;
-  };
-}
+import { Reward } from "@/types/reward";
 
 export default async function ProfilePage() {
   const cookieStore = cookies();
@@ -60,7 +51,7 @@ export default async function ProfilePage() {
                   {reward.discount}
                 </p>
                 <p className="text-sm text-gray-500">
-                  From: {reward.partner?.name}
+                  From: {reward.partner.name}
                 </p>
               </li>
             ))}

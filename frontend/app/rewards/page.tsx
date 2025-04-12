@@ -5,17 +5,18 @@ import { Reward } from "@/types/reward";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RewardPopup } from "@/components/RewardPopup";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
+import { decodeToken } from "@/lib/auth";
+import { useIsSignedIn } from "@/lib/hooks/use-is-signed-in";
 
 export default function RewardsPage() {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [selected, setSelected] = useState<Reward | null>(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 639px)");
+  const isSignedIn = useIsSignedIn();
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/rewards`, {
-      cache: "no-store",
-    })
+    fetch("/api/rewards", { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch rewards");
         return res.json();
@@ -31,19 +32,37 @@ export default function RewardsPage() {
 
   const handleRedeem = async (rewardId: string) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}/rewards/redeem/${rewardId}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
+      if (!isSignedIn) {
+        alert("Please sign in to redeem a reward.");
+        return;
+      }
 
-      if (!res.ok) throw new Error("Failed to redeem");
+      // Retrieve the token from document.cookie
+      const token = document.cookie
+        .split("; ")
+        .find((cookie) => cookie.startsWith("token="))
+        ?.split("=")[1];
+      if (!token) throw new Error("User not authenticated");
+
+      // Decode the token to extract the user ID
+      const decodedUser = decodeToken(token);
+      if (!decodedUser || !decodedUser.sub)
+        throw new Error("Invalid token: missing user ID");
+      const userId = decodedUser.sub;
+
+      // Redeem the reward by calling the Next.js API route
+      const res = await fetch(`/api/rewards/redeem/${rewardId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!res.ok) throw new Error("Failed to redeem reward");
 
       alert("Redeemed successfully!");
       setPopupOpen(false);
     } catch (err) {
+      console.error(err);
       alert("Failed to redeem reward.");
     }
   };
