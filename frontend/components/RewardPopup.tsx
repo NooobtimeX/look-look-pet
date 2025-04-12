@@ -22,6 +22,7 @@ interface RewardPopupProps {
   isMobile: boolean;
   open: boolean;
   onClose: () => void;
+  onRedeem: (rewardId: string) => void;
 }
 
 export function RewardPopup({
@@ -29,6 +30,7 @@ export function RewardPopup({
   isMobile,
   open,
   onClose,
+  onRedeem,
 }: RewardPopupProps) {
   if (!reward) return null;
 
@@ -48,6 +50,12 @@ export function RewardPopup({
             : reward.partner?.name}
         </p>
       </div>
+      <button
+        onClick={() => reward && onRedeem(reward._id)}
+        className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+      >
+        Redeem Now
+      </button>
     </div>
   );
 

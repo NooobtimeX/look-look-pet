@@ -12,7 +12,7 @@ interface Reward {
   };
 }
 
-export default async function DashboardPage() {
+export default async function ProfilePage() {
   const cookieStore = cookies();
   const token = (await cookieStore).get("token")?.value;
   const decoded = token ? decodeToken(token) : null;
@@ -39,8 +39,8 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="flex flex-col min-h-screen p-4">
+      <h1 className="text-3xl font-bold">Profile</h1>
       <p className="mt-4 text-lg">Welcome, {email}</p>
 
       <div className="mt-8 w-full max-w-xl">

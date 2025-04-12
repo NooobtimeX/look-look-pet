@@ -21,14 +21,14 @@ export default function SigninPage() {
     });
 
     if (res.ok) {
-      router.push("/dashboard"); // ✅ redirect if success
+      router.push("/profile"); // ✅ redirect if success
     } else {
       alert("Sign in failed");
     }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex items-center justify-center min-h-screen">
       <Card className="w-96">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold">

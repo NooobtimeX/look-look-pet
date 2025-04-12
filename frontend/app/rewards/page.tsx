@@ -29,9 +29,28 @@ export default function RewardsPage() {
     setPopupOpen(true);
   };
 
+  const handleRedeem = async (rewardId: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/rewards/redeem/${rewardId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to redeem");
+
+      alert("Redeemed successfully!");
+      setPopupOpen(false);
+    } catch (err) {
+      alert("Failed to redeem reward.");
+    }
+  };
+
   return (
     <div className="px-6 py-10 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-semibold tracking-tight mb-10 text-center">
+      <h1 className="text-3xl text-secondary font-semibold tracking-tight mb-10 text-center">
         Explore Exclusive Rewards
       </h1>
 
@@ -44,12 +63,12 @@ export default function RewardsPage() {
           >
             <Card className="rounded-2xl border border-muted shadow-sm hover:shadow-md transition-shadow bg-background">
               <CardHeader>
-                <CardTitle className="text-xl font-medium text-foreground group-hover:underline">
+                <CardTitle className="text-xl font-medium text-primary group-hover:underline">
                   {reward.name}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 text-muted-foreground">
-                <p className="text-blue-600 font-medium">
+                <p className="text-secondary font-medium">
                   {reward.discount}% OFF
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -66,6 +85,7 @@ export default function RewardsPage() {
         isMobile={isMobile}
         open={popupOpen}
         onClose={() => setPopupOpen(false)}
+        onRedeem={handleRedeem}
       />
     </div>
   );
