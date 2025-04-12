@@ -51,7 +51,7 @@ export function NavHeaderMobile() {
           </SheetHeader>
 
           <nav className="mt-6 flex flex-col gap-4 text-sm font-medium">
-            {navLinks.map((link, index) => (
+            {navLinks.map((link) => (
               <div
                 key={link.href}
                 className="flex flex-col items-center justify-center"

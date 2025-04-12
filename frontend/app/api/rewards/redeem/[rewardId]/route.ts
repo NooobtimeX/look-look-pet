@@ -1,6 +1,8 @@
 // /app/api/rewards/redeem/[rewardId]/route.ts
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // This POST handler receives the rewardId from the URL parameters and the userId from the request body.
 export async function POST(
   request: Request,
@@ -14,16 +16,14 @@ export async function POST(
   if (!userId) {
     return NextResponse.json({ error: "userId is required" }, { status: 400 });
   }
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
 
   // Forward the redeem request to the NestJS backend API.
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API}/rewards/redeem/${rewardId}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-    }
-  );
+  const res = await fetch(`${baseUrl}/rewards/redeem/${rewardId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  });
 
   // If the backend returns an error, forward it to the client.
   if (!res.ok) {

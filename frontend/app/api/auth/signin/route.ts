@@ -1,10 +1,12 @@
 // app/api/auth/signin/route.ts
 import { NextResponse } from "next/server";
-import { API_URL } from "@/lib/api";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const res = await fetch(`${API_URL}/auth/signin`, {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
+  const res = await fetch(`${baseUrl}/auth/signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

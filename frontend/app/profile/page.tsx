@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { decodeToken } from "@/lib/auth";
 import React from "react";
 import { Reward } from "@/types/reward";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 export default async function ProfilePage() {
   const cookieStore = cookies();

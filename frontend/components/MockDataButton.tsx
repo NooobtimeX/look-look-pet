@@ -21,9 +21,13 @@ export default function MockDataButton() {
       const data = await res.json();
       console.log("Mock data created:", data);
       setStatus("✅ Mock data created successfully!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setStatus(`❌ Failed to create mock data: ${err.message}`);
+      if (err instanceof Error) {
+        setStatus(`❌ Failed to create mock data: ${err.message}`);
+      } else {
+        setStatus("❌ Failed to create mock data: An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }

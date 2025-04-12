@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 export interface DecodedUser {
   email?: string;
   sub?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export function decodeToken(token: string): DecodedUser | null {

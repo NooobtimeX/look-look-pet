@@ -1,11 +1,12 @@
-// app/api/mock-data/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { API_URL } from "@/lib/api";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export const dynamic = "force-dynamic";
+
+export async function POST() {
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
     // 1. Create partner
-    const partnerRes = await fetch(`${API_URL}/partners`, {
+    const partnerRes = await fetch(`${baseUrl}/partners`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     // 2. Create 6 rewards
     const rewards = await Promise.all(
       Array.from({ length: 6 }, (_, i) =>
-        fetch(`${API_URL}/rewards`, {
+        fetch(`${baseUrl}/rewards`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
