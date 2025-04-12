@@ -8,9 +8,7 @@ import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
-    // Load env variables globally
     ConfigModule.forRoot({ isGlobal: true }),
-    // Use env variable to connect to MongoDB
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -4,7 +4,7 @@ import { RewardsController } from "./rewards.controller";
 import { RewardsService } from "./rewards.service";
 import { Reward, RewardSchema } from "./reward.schema";
 import { Partner, PartnerSchema } from "../partners/partner.schema";
-import { UsersModule } from "src/users/users.module";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   imports: [
