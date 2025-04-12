@@ -1,25 +1,30 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { Partner } from "./partner.schema";
 import { CreatePartnerDto } from "./dto/create-partner.dto";
-import { Partner } from "./entities/partner.entity";
-import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class PartnersService {
-  private partners: Partner[] = [];
+  constructor(
+    @InjectModel(Partner.name) private partnerModel: Model<Partner>
+  ) {}
 
-  async create(createPartnerDto: CreatePartnerDto): Promise<Partner> {
-    const hashed = await bcrypt.hash(createPartnerDto.password, 10);
-    const partner: Partner = {
-      id: this.partners.length + 1,
-      ...createPartnerDto,
-      password: hashed,
-      rewards: [],
-    };
-    this.partners.push(partner);
-    return partner;
+  async create(dto: CreatePartnerDto): Promise<Partner> {
+    const partner = new this.partnerModel(dto);
+    return partner.save();
   }
 
-  async findByUsername(username: string): Promise<Partner | undefined> {
-    return this.partners.find((p) => p.username === username);
+  async findAll(): Promise<Partner[]> {
+    return this.partnerModel.find().exec();
+  }
+
+  async findOne(id: string): Promise<Partner> {
+    const partner = await this.partnerModel.findById(id);
+    if (!partner) throw new NotFoundException("Partner not found");
+    return partner;
+  }
+  async delete(id: string): Promise<Partner | null> {
+    return this.partnerModel.findByIdAndDelete(id);
   }
 }

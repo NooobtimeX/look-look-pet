@@ -1,5 +1,17 @@
+import { IsNotEmpty, IsString, IsMongoId } from "class-validator";
+
 export class CreateRewardDto {
-  title: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
   description: string;
-  partnerId: number; // identifies which partner created the reward
+
+  @IsString()
+  @IsNotEmpty()
+  discount: string;
+
+  @IsMongoId()
+  partner: string;
 }

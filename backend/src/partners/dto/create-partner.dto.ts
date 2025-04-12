@@ -1,5 +1,10 @@
+import { IsNotEmpty, IsString } from "class-validator";
+
 export class CreatePartnerDto {
-  username: string;
-  email: string;
-  password: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  description: string;
 }

@@ -1,19 +1,28 @@
-import { Controller, Post, Body, Get } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param, Delete } from "@nestjs/common";
 import { RewardsService } from "./rewards.service";
 import { CreateRewardDto } from "./dto/create-reward.dto";
 
 @Controller("rewards")
 export class RewardsController {
-  constructor(private rewardsService: RewardsService) {}
+  constructor(private readonly rewardsService: RewardsService) {}
 
   @Post()
-  async createReward(@Body() createRewardDto: CreateRewardDto) {
-    const reward = await this.rewardsService.create(createRewardDto);
-    return reward;
+  create(@Body() dto: CreateRewardDto) {
+    return this.rewardsService.create(dto);
   }
 
   @Get()
-  async getRewards() {
+  findAll() {
     return this.rewardsService.findAll();
+  }
+
+  @Get(":id")
+  findById(@Param("id") id: string) {
+    return this.rewardsService.findById(id);
+  }
+
+  @Delete(":id")
+  delete(@Param("id") id: string) {
+    return this.rewardsService.delete(id);
   }
 }
