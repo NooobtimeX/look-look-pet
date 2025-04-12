@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             name: `Reward ${i + 1}`,
             description: `Description for Reward ${i + 1}`,
+            image: `https://example.com/reward${i + 1}.jpg`,
             discount: `${10 + i * 5}`,
             partner: partner._id,
           }),

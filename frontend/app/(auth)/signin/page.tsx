@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export default function SigninPage() {
   const router = useRouter();
@@ -21,9 +22,10 @@ export default function SigninPage() {
     });
 
     if (res.ok) {
+      toast("Signin successful");
       router.push("/profile"); // ✅ redirect if success
     } else {
-      alert("Sign in failed");
+      toast("Signin failed");
     }
   }
 

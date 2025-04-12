@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Kanit } from "next/font/google";
 import "./globals.css";
 import { NavHeader } from "@/components/nav/NavHeader";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <NavHeader />
         <main className="mx-auto max-w-7xl">{children}</main>
+        <Toaster />
       </body>
     </html>
   );

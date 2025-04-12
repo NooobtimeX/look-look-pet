@@ -34,6 +34,8 @@ export function RewardPopup({
 }: RewardPopupProps) {
   if (!reward) return null;
 
+  const rewardImage = "/Reward_placeholder.png"; // Replace if you have image URLs from backend
+
   const content = (
     <div className="space-y-4 text-sm text-muted-foreground px-4 pb-6">
       <div>
@@ -42,6 +44,7 @@ export function RewardPopup({
           {reward.discount}% OFF
         </p>
       </div>
+
       <div>
         <span className="text-xs uppercase text-gray-400">Partner</span>
         <p className="text-base text-foreground font-medium">
@@ -50,6 +53,7 @@ export function RewardPopup({
             : reward.partner?.name}
         </p>
       </div>
+
       <button
         onClick={() => reward && onRedeem(reward._id)}
         className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
@@ -64,6 +68,12 @@ export function RewardPopup({
       <Drawer open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
         <DrawerContent className="rounded-t-2xl border bg-background">
           <DrawerHeader className="text-left space-y-1 px-4 pt-6">
+            {" "}
+            <img
+              src={rewardImage}
+              alt={reward.name}
+              className="w-full h-48 object-cover rounded-xl"
+            />
             <DrawerTitle className="text-2xl font-semibold">
               {reward.name}
             </DrawerTitle>
@@ -79,8 +89,14 @@ export function RewardPopup({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="rounded-xl border bg-background">
-        <DialogHeader className="space-y-2">
+      <DialogContent className="rounded-xl border bg-background p-0 overflow-hidden">
+        <DialogHeader className="space-y-2 px-4 pt-6">
+          {" "}
+          <img
+            src={rewardImage}
+            alt={reward.name}
+            className="w-full h-48 object-cover rounded-xl"
+          />
           <DialogTitle className="text-2xl font-semibold">
             {reward.name}
           </DialogTitle>

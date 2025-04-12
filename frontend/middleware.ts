@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
     token
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = "/profile";
     return NextResponse.redirect(url);
   }
 

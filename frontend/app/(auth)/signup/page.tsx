@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -21,9 +22,10 @@ export default function SignupPage() {
     });
 
     if (res.ok) {
-      router.push("/signin"); // ✅ redirect to login after signup
+      toast("Signup successful");
+      router.push("/signin"); // redirect to login after signup
     } else {
-      alert("Signup failed");
+      toast("Signup failed");
     }
   }
 
