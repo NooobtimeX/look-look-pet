@@ -1,4 +1,6 @@
-# Use an official Node.js runtime
+# backend/Dockerfile
+
+# Use an official Node.js runtime as the base image
 FROM node:18-alpine
 
 # Set working directory
@@ -8,14 +10,14 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy the rest of your app’s source code
+# Copy the rest of your backend source code
 COPY . .
 
-# Build the project (adjust command if needed)
+# Build the backend (modify if your build command differs)
 RUN npm run build
 
-# Expose the port defined in your env (3001)
+# Expose the port your app listens on
 EXPOSE 3001
 
-# Start the application in production mode
-CMD [ "npm", "run", "start:prod" ]
+# Start the backend in production mode
+CMD ["npm", "run", "start:prod"]
