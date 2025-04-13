@@ -16,15 +16,17 @@ export default function RewardsPage() {
   const isMobile = useMediaQuery("(max-width: 639px)");
   const isSignedIn = useIsSignedIn();
 
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
+
   useEffect(() => {
-    fetch("/api/rewards", { cache: "no-store" })
+    fetch(`${baseUrl}/rewards`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch rewards");
         return res.json();
       })
       .then(setRewards)
       .catch(() => toast("Failed to load rewards"));
-  }, []);
+  }, [baseUrl]);
 
   const handleCardClick = (reward: Reward) => {
     setSelected(reward);
@@ -49,7 +51,7 @@ export default function RewardsPage() {
         throw new Error("Invalid token: missing user ID");
 
       const userId = decodedUser.sub;
-      const res = await fetch(`/api/rewards/redeem/${rewardId}`, {
+      const res = await fetch(`${baseUrl}/rewards/redeem/${rewardId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),
@@ -79,7 +81,6 @@ export default function RewardsPage() {
             className="cursor-pointer transform hover:scale-105 transition duration-300"
           >
             <Card className="rounded-2xl gap-0 border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300 bg-white overflow-hidden p-0">
-              {/* Image flush with top & sides */}
               <img
                 src="/Reward_placeholder.png"
                 alt={reward.name}

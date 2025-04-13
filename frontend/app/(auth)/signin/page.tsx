@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -15,15 +14,24 @@ export default function SigninPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch("/api/auth/signin", {
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
+    const res = await fetch(`${baseUrl}/auth/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      // include credentials so that cookies from the backend (if any) can be included
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
     if (res.ok) {
+      const data = await res.json();
+      // If the backend returns an access token, set it as a cookie
+      if (data.access_token) {
+        // Note: This cookie is not HTTP only.
+        document.cookie = `token=${data.access_token}; path=/`;
+      }
       toast("Signin successful");
-      router.push("/profile"); // ✅ redirect if success
+      router.push("/profile"); // redirect if signin is successful
     } else {
       toast("Signin failed");
     }

@@ -1,3 +1,4 @@
+// app/profile/page.tsx
 import { cookies } from "next/headers";
 import { decodeToken } from "@/lib/auth";
 import React from "react";
@@ -6,30 +7,42 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 export default async function ProfilePage() {
   const cookieStore = cookies();
-  const token = (await cookieStore).get("token")?.value;
-  const decoded = token ? decodeToken(token) : null;
+  const token = cookieStore.get("token")?.value;
+  console.log("token:", token); // Debug log
 
+  const decoded = token ? decodeToken(token) : null;
   const email = decoded?.email ?? "Guest";
   const userId = decoded?.sub;
-  let rewards: Reward[] = [];
+  console.log("Decoded User ID:", userId); // Debug log
 
-  if (userId && token) {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${userId}/rewards`,
-      {
+  let rewards: Reward[] = [];
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
+  console.log("Base URL:", baseUrl); // Debug log
+
+  try {
+    if (userId && token && baseUrl) {
+      const res = await fetch(`${baseUrl}/users/${userId}/rewards`, {
         headers: { Authorization: `Bearer ${token}` },
         cache: "no-store",
+      });
+      console.log("API response status:", res.status); // Debug log
+      if (res.ok) {
+        rewards = await res.json();
+        console.log("Fetched rewards:", rewards); // Debug log
+      } else {
+        console.error("Failed to fetch rewards. Status:", res.status);
       }
-    );
-    if (res.ok) {
-      rewards = await res.json();
+    } else {
+      console.error("Missing userId, token, or baseUrl.");
     }
+  } catch (error) {
+    console.error("Error fetching rewards:", error);
   }
 
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-secondary tracking-tight text-center">
+        <h1 className="text-4xl font-bold text-secondary tracking-tight">
           Profile
         </h1>
         <p className="text-xl">Welcome, {email}</p>
@@ -48,7 +61,6 @@ export default async function ProfilePage() {
                 className="cursor-pointer transform hover:scale-105 transition duration-300"
               >
                 <Card className="rounded-2xl gap-0 border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300 bg-white overflow-hidden p-0">
-                  {/* Image flush with top & sides */}
                   <img
                     src="/Reward_placeholder.png"
                     alt={reward.name}
