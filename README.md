@@ -25,6 +25,7 @@ npm run dev
 ```
 
 ## Docker Deployment
+Start docker engine
 
 To build and run the project with Docker:
 ```bash
