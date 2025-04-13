@@ -18,20 +18,18 @@ export default function SigninPage() {
     const res = await fetch(`${baseUrl}/auth/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // include credentials so that cookies from the backend (if any) can be included
       credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
     if (res.ok) {
       const data = await res.json();
-      // If the backend returns an access token, set it as a cookie
       if (data.access_token) {
-        // Note: This cookie is not HTTP only.
         document.cookie = `token=${data.access_token}; path=/`;
+        router.refresh(); // Refresh to update state (like useIsSignedIn)
       }
       toast("Signin successful");
-      router.push("/profile"); // redirect if signin is successful
+      router.push("/profile");
     } else {
       toast("Signin failed");
     }

@@ -11,21 +11,30 @@ export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API;
-    const res = await fetch(`${baseUrl}/users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch(`${baseUrl}/users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (res.ok) {
-      toast("Signup successful");
-      router.push("/signin"); // redirect to login after signup
-    } else {
-      toast("Signup failed");
+      if (res.ok) {
+        toast("Signup successful");
+        router.push("/signin"); // redirect to login after signup
+      } else {
+        const error = await res.json();
+        toast(error.message || "Signup failed");
+      }
+    } catch {
+      toast("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -61,8 +70,8 @@ export default function SignupPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
         </CardContent>
